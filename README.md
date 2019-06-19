@@ -8,17 +8,7 @@ https://labs.play-with-k8s.com/
 ## Overview
 See `Makefile` for commands commands.
 
-`kubectl` command line tool is used send API requests and commands to an API-server which runs in the master node inside the cluster.
-
-Cluster
-- Master, asigns work to nodes
-- nodes, contain pods, pods contain container(s)
-- workers
-api-command with JSON manifest file (describes desired state)
-
-Pods: unit of work
-Replication controller/deployments: Scale pods, desired state, rollbacks, updates
-Services: Stable networking: load balancing 
+`kubectl` command line tool is used send API requests and commands to an API-server which runs in the master node inside the cluster. Api-commands are used with JSON manifest files to describes desired state.
 
 ## History
 
@@ -60,7 +50,7 @@ Game Plan -> App manifest
 Players -> Services
 ```
 
-A cluster can have many Services, that can 
+## Clusters
 
 ```
 Cluster 
@@ -69,6 +59,18 @@ Cluster
             -< Pods
                 -< Containers
 ```
+
+Nodes:
+- Master Node: assigns work to nodes
+- Nodes: contain pods, pods contain container(s)
+
+Pods: smallest unit of work
+
+Replication controller/deployments: 
+Scale pods, maintain desired state, rollbacks, updates
+
+Services: 
+Provide stable networking IP/Ports, and handle load balancing between nodes.
 
 ## Pods
 
