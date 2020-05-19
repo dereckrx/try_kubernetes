@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: hello-replication-controller
+spec:
+  replicas: 2 # number of pods to spin up
+  selector:
+    matchLabels:
+      app: hello-world
+  template: # Embedded pod spec here
+    metadata:
+      labels:
+        app: hello-world # matches the selector above
+    spec:
+      containers:
+        - name: hello-pod
+          image: nigelpoulton/pluralsight-docker-ci:latest
+          ports:
+            - containerPort: 8080

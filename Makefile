@@ -6,16 +6,16 @@ start:
 stop:
 	minikube stop
 
-# List nodes in the cluster
+# List nodes in the cluster to see minicube
 nodes:
-	kubeclt get nodes
+	kubectl get nodes
 
 # Open web UI for cluster
 dashboard:
 	minikube dashboard
 
 setup:
-	brew cask install minikube && \
+	brew install minikube && \
 	brew install hyperkit && \
 	curl -LO https://storage.googleapis.com/minikube/releases/latest/docker-machine-driver-hyperkit && \
 	sudo install -o root -g wheel -m 4755 docker-machine-driver-hyperkit /usr/local/bin/
