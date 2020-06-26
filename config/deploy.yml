@@ -1,4 +1,16 @@
-apiVersion: extensions/v1beta1
+# k create -f hello-deploy.yaml --record
+# Apply updates to existing deployment
+# and trigger rollout:
+# k apply -f hello-deploy.yaml
+# Show status of rollout:
+# k rollout status deploy hello-deploy --record=true
+# List rolled out pods:
+# k get pods
+# List revisions:
+# k rollout history deploy hello-deploy
+# Rollback:
+# k rollout undo deploy hello-deploy
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hello-deploy
@@ -16,7 +28,7 @@ spec:
         app: hello-world
     spec:
       containers:
-      - name: hello-pod
-        image: nigelpoulton/pluralsight-docker-ci:latest
-        ports:
-        - containerPort: 8080
+        - name: hello-pod
+          image: nigelpoulton/pluralsight-docker-ci:latest
+          ports:
+            - containerPort: 8080

@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-rules
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: / # ensure service is called with '/' and not /something
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /wear
+            backend:
+              serviceName: wear-service
+              servicePort: 8080
+          - path: /watch
+            backend:
+              serviceName: video-service
+              servicePort: 8080
