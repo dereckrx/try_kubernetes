@@ -16,9 +16,5 @@ ENTRYPOINT ["sleep"]
 CMD ["5"]
 ```
 
-## Kubernetes commands and argurments
 
-Override in `pod-definiton.yml`
-ENTRYPOINT ["sleep"] -> command: ["sleep2.0"]
-CMD ["5"] -> args: ["10"]
 
