@@ -6,6 +6,16 @@ start:
 stop:
 	minikube stop
 
+minikube-ssh:
+	minikube ssh
+
+# Build an image inside the minikube docker
+# Then reset the docker env
+minikube-docker:
+	eval $$(minikube docker-env)
+	docker build -t ubuntu-sleeper ./udemy_kubernetes_certified_app_dev/sections/3-configuration
+	eval $$(minikube docker-env -u)
+
 # List nodes in the cluster to see minicube
 nodes:
 	kubectl get nodes
@@ -19,9 +29,16 @@ setup:
 	brew install hyperkit && \
 	curl -LO https://storage.googleapis.com/minikube/releases/latest/docker-machine-driver-hyperkit && \
 	sudo install -o root -g wheel -m 4755 docker-machine-driver-hyperkit /usr/local/bin/
+	brew tap instrumenta/instrumenta
+	brew install kubeval
+	brew install asdf
+
 
 push:
 	GIT_SSH_COMMAND="ssh -i ~/.ssh/id_drx_rsa -F /dev/null" git push
+
+validate-config: 
+	@echo kubeval my-conifg.yaml
 
 # Docker container repo commands
 #-------------------------------------------------
