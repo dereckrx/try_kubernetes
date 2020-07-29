@@ -1,8 +1,13 @@
 # State Persistance
 
-k exec -it webapp cat /log/app.log
-k get pvc # persistentvolumeclaim
-k get pv # persistentvolume
+* k exec -it webapp cat /log/app.log
+* k get pvc # persistentvolumeclaim
+* k get pv # persistentvolume
+
+* pod: has a pvClaim
+* pvClaim: has spec requirements for volume
+* volume: has spec (accessMode, capacity, host or 3rd party info)
+* pvClaim -> requirements mapped to available volumes -> volume
 
 ## Volumes
 

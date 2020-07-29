@@ -20,13 +20,8 @@ When a POD has more than one container
 
 Pod's containers talk to each other using localhost
 
-- same netowrk namespace
+- same network namespace
 - same storage
 
-## Editing Pods
 
-Output yaml if you don't have one
-`kubectl get pod <pod-name> -o yaml > pod-definition.yaml`
 
-command to edit pod properties.
-`Use the kubectl edit pod <pod-name>`

@@ -17,6 +17,9 @@ metadata:
 spec:
   replicas: 2
   minReadySeconds: 10 # Ensure pods healthy for 10 secs before taking down the next pod
+  selector:
+    matchLabels:
+      app: hello-world
   strategy:
     type: RollingUpdate
     rollingUpdate: # Take 1 down at a time

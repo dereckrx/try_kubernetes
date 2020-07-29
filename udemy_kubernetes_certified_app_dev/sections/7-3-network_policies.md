@@ -1,11 +1,11 @@
 # Network policies
 ## Traffic
 
-user -> frontend: port 80
-fontend -> backend-api: port 5000
-backend-api -> database: port 3306
+* user -> frontend: port 80
+* fontend -> backend-api: port 5000
+* backend-api -> database: port 3306
 
-### Traffic types: 
+### Traffic types:
 - ingress: inbound
 - egress: outbound
 

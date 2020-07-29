@@ -1,3 +1,6 @@
+# You'll be able to curl the NodePort Service
+# by requesting `curl <NodeIP>:<NodePort>` (use IP of node cluster not np service)
+
 apiVersion: v1
 kind: Service
 metadata:
@@ -6,8 +9,9 @@ spec:
   type: NodePort
   ports:
     - nodePort: 30000
+      # By default, the `targetPort` is set to the same value as the `port` field.
       port: 80
       targetPort: 80
   selector: # Copy labels from pod pod.metadata.labels
-    - app: myapp
-      type: front-end
+    app: myapp
+    type: front-end

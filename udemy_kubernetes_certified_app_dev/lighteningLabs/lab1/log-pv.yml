@@ -1,0 +1,66 @@
+Create a Persistent Volume called
+* name: log-volume.
+* storage class name manual.
+* accessMode: readWriteMany
+* capacity: storage: 1Gi
+* hostPath: /opt/volume/nginx
+
+log-pvc
+* name: log-claim
+* storage: 200Mi
+
+logger-pod.yaml
+name: logger
+image: nginx:alpine
+volumeMounts:
+  path: /var/www/nginx
+
+log-pv.yml
+```yaml
+  apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    name: log-volume
+  spec:
+    capacity:
+      storage: 1Gi
+    accessModes:
+      - ReadWriteMany
+    storageClassName: manual
+    hostPath:
+      path: /any/path/it/will/be/replaced
+```
+
+log-pvc.yml
+```yaml
+  apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: log-claim
+  spec:
+    accessModes:
+      - ReadWriteMany
+    storageClassName: manual
+    resources:
+      requests:
+        storage: 200Mi
+```
+
+log-pod.yml
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: logger
+spec:
+  containers:
+    - name: logger
+      image: nginx:alpine
+      volumeMounts:
+        - name: log-claim
+          mountPath: /var/www/nginx
+  volumes:
+  - name: log-claim
+    persistentVolumeClaim:
+      claimName: log-claim
+```
