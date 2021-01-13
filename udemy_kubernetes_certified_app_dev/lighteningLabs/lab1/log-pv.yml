@@ -1,6 +1,6 @@
 Create a Persistent Volume called
 * name: log-volume.
-* storage class name manual.
+* storageClassName manual.
 * accessMode: readWriteMany
 * capacity: storage: 1Gi
 * hostPath: /opt/volume/nginx

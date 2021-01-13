@@ -1,7 +1,8 @@
+# Match with labels
 apiVersion: apps/v1
-kind: Deployment
+kind: Replicaset
 metadata:
-  name: myapp-deployment
+  name: myapp-rc
   labels:
     app: myapp
     type: front-end

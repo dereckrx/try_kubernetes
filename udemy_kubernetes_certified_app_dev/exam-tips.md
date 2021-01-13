@@ -19,6 +19,7 @@ dont waste time debugging more than twice
 understand how the documentation is layout
 
 run the context command at the top of each question
+`k config set-context mycontext --namespace=mynamespace`
 
 What resources am I allowed to access during my exam?
 Candidates may use their Chrome or Chromium browser to open one additional tab in order to
@@ -47,20 +48,6 @@ If you think you can do it, try it out
 If it’s still not working after multiple tries, mark it and come back to it later
 If you think it’s hard mark it right away, don’t try it
 
-
-## Shortcuts
-po: pods
-rs: repicasets
-deploy: deployments
-svc: services
-ns: namespace
-netpol: network policies
-pv: persistant volume
-pvc: persistent volume claims
-sa: service account
-
--n namespace
-
 ## vi commands
 ^ start line
 $ end line
@@ -77,12 +64,13 @@ set tabstop=2
 
 ## Commands 
 alias k=kubectl
-k config set-context mycontext --namespace=mynamespace
-kubectl expalain cronjob.spec.jobTemplate --recursive
+k config set-context mycontext --namespace=mynamespace # Run this on every question
+kubectl explain cronjob.spec.jobTemplate --recursive
 man if_exam # exam tips during exam
 sudo -i
 ssh <node-name>
 
+### Imperitive commands
 k run nginx --image=nginx (deployment)
 k run nginx --image=nginx --restart=Never (pod)
 k run nginx --image=nginx --restart=OnFailure (job)
@@ -100,6 +88,7 @@ k run nginx --image=nginx --restart=Never
 --dry-run -o yaml
 -- /bin/sh -c 'echo hellow world'
 
+### Deployment???
 k run frontent --replicas=2 
 --labels=run=load-balancer-example 
 --image=busybox
@@ -118,8 +107,6 @@ args: ["-c", "mkdir -p collect; while true; do cat /var/data/* > /collect/data.t
 
 a=10;b=5; if [ $a -le $b ]; then echo "a is small"; else echo "b is small"; fi
 x=1; while [$x -le 10]; do echo "welcome $x times"; x=$((x+1)); done
-
-
 
 ## Kubectl reference
 cheatsheet and imperative commands without yaml

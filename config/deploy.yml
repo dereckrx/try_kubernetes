@@ -1,15 +1,21 @@
 # k create -f hello-deploy.yaml --record
+
 # Apply updates to existing deployment
 # and trigger rollout:
 # k apply -f hello-deploy.yaml
+
 # Show status of rollout:
 # k rollout status deploy hello-deploy --record=true
+
 # List rolled out pods:
 # k get pods
+
 # List revisions:
 # k rollout history deploy hello-deploy
+
 # Rollback:
 # k rollout undo deploy hello-deploy
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -35,3 +41,27 @@ spec:
           image: nigelpoulton/pluralsight-docker-ci:latest
           ports:
             - containerPort: 8080
+
+# Another Udemy example
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-deployment
+  labels:
+    app: myapp
+    type: front-end
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      type: front-end
+  template:
+    metadata:
+      name: myapp-pod
+      labels:
+        app: myapp
+        type: front-end
+    spec:
+      containers:
+        - name: nginx-container
+          image: nginx

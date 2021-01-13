@@ -1,3 +1,10 @@
+## Jan 11, 2021
+* Redo Wordpress lightling lab (little help as possible)
+* Then move onto lab 2
+
+
+=======================================
+
 ## June 9th, 2020
 Recs from Pivots:
 Read from former students:
