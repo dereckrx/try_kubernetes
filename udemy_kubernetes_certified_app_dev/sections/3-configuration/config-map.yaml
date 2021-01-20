@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: app-config
-data:
-  - name: APP_COLOR
-    value: blue
-  - name: APP_URL
-    value: http://example.com

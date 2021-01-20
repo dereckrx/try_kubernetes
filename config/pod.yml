@@ -9,4 +9,7 @@ spec:
     image: nginx
     ports:
     - containerPort: 8080
-    command: ["sleep", "3600"]
+    command: ["sleep", "$DURATION"]
+    env:
+    - name: DURATION
+      value: "3600"

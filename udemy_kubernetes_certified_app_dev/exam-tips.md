@@ -81,44 +81,10 @@ ssh <node-name>
 
 You must return to the base node (hostname node-1) after completing each task.
 
-
-### Imperitive commands
-k run nginx --image=nginx (deployment)
-k run nginx --image=nginx --restart=Never (pod)
-k run nginx --image=nginx --restart=OnFailure (job)
-k run nginx --image=nginx --restart=OnFailure --schedule="* * * * *" (cronjob)
-
-k run nginx --image=nginx --restart=Never 
---port=80 
---namespace=myname 
---command
---serviceaccount=mysql
---env=HOSTNAME=local
---labels=bu=finance,env=dev
---requests='cpu=100m,memory=256Mi'
---limits='cpu=200m,memory=512Mi'
---dry-run -o yaml
--- /bin/sh -c 'echo hellow world'
-
-### Deployment???
-k run frontent --replicas=2 
---labels=run=load-balancer-example 
---image=busybox
---port=8080
-
-k expose deployment frontend --type=NodePort 
---name=frontent-service --port=6262 --target-port=8080
-
-k set serviceaccount deployment frontend myuser
-k create service clusterip my-cs --tcp=5678:8080 --dry-run -o yaml
-
 ## Unix on-liners
-args: ["-c", while true; do date >> /var/logs/app.txt; sleep 5; done"]
+args: ["-c", "while true; do date >> /var/logs/app.txt; sleep 5; done"]
 args: [/bin/sh, -c, 'i=0; while true; do echo "$i: $(date)"; i=$((i+1)); sleep 1; done']
 args: ["-c", "mkdir -p collect; while true; do cat /var/data/* > /collect/data.txt; sleep 10; done"]
 
 a=10;b=5; if [ $a -le $b ]; then echo "a is small"; else echo "b is small"; fi
 x=1; while [$x -le 10]; do echo "welcome $x times"; x=$((x+1)); done
-
-## Kubectl reference
-cheatsheet and imperative commands without yaml

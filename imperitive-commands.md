@@ -37,6 +37,7 @@ Verify ConfigMap in Pod: k exec time-check -n dvl1987 env | grep -i time
 
 * note org, restart computer
 * go back through section tests (networking etc) service accounts
+  * k set serviceaccount deployment frontend myuser
 
 k explain <resource> and grep for key
 k explain ingress --recursive | grep rules -A10
@@ -68,6 +69,24 @@ spec:
             values:
             - beta
 
+
+### Imperitive commands (TODO)
+k run nginx --image=nginx (deployment)
+k run nginx --image=nginx --restart=Never (pod)
+k run nginx --image=nginx --restart=OnFailure (job)
+k run nginx --image=nginx --restart=OnFailure --schedule="* * * * *" (cronjob)
+
+k run nginx --image=nginx --restart=Never 
+--port=80 
+--namespace=myname 
+--command "/bin/sh -c 'echo hellow world'"
+--serviceaccount=mysql
+--env=HOSTNAME=local
+--labels=bu=finance,env=dev
+--requests='cpu=100m,memory=256Mi'
+--limits='cpu=200m,memory=512Mi'
+--port=8080
+--dry-run -o yaml
 
 ## Setup
 TextEdit: Preferences
@@ -243,6 +262,8 @@ kubectl expose pod redis --port=6379 --name redis-service --dry-run=client -o ya
 kubectl expose rc hello-rc --name=hello-service --target-port=8080 --type=NodePort
 
 k expose deploy webapp-deploy --type=NodePort --name=webapp-svc --target-port=8080  --dry-run -o yaml > webapp-svc.yaml
+
+k create service clusterip my-clusterIp-service --tcp=5678:8080 --dry-run -o yaml
 
 kubectl run httpd --image=httpd:alpine --port=80 --expose
 
