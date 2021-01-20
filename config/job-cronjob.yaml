@@ -1,0 +1,37 @@
+# create cronjob throw-dice-cron-job --image=kodekloud/throw-dice --schedule="30 21 * * *"
+apiVersion:   
+kind: CronJob
+metadata:
+  name: reporting-cron-job
+spec:
+  schedule: “*/1 * * * *”
+  jobTemplate:
+    spec:
+      completions: 3
+      parallelism: 3
+      template:
+        spec:
+          containers:
+            - name: reporting-tool
+             image: reporting-tool
+          restartPolicy: Never
+
+# k create cronjob dice --image kodekloud/throw-dice --schedule="* * * * *" --dry-run -o yaml> dice.yaml
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: throw-dice-cron-job
+spec:
+  schedule: "30 21 * * *"
+  jobTemplate:
+    spec:
+      completions: 3 # how many successes needed
+      parallelism: 3 # num runs in parallel
+      backoffLimit: 25 # This is so the job does not quit before it succeeds.
+      activeDeadlineSeconds: 100 # complete by deadline or fail and terminate
+      template:
+        spec:
+          containers:
+          - name: math-add
+            image: kodekloud/throw-dice
+          restartPolicy: OnFailure 

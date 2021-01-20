@@ -1,4 +1,99 @@
 
+
+## INbox
+* how to find out hostPath key in persistant-volume? PV types?
+* how claim needed storage class as well
+
+sudo -i
+ssh <pod>
+VIM config
+
+QUIZ: volumeMounts have VolumePath not path
+QUIZ: volumeMounts: name, mountPath, readOnly
+QUIZ: k exec -it webapp-color -- sh. then: nc -vz -w 1 secure-pop
+QUIZ: --command when? k run pod (without =)
+QUIZ: Debug pod
+- look for event errors in describe
+- look for liveness, readiness results
+- check ports
+- look at svc and ingress controllers
+QUIZ: WATCH OUT FOR NUMBERS IN CONFGS/ENV, must be wrapped in quotes "
+
+k edit deploy nginx-deploy --image=nginx:1.17 --record
+
+resources.requests.cpu: "0.2"
+volumeMounts: 
+ports:
+- containerPort: 6379
+nodeName: 
+
+k logs <pod_name> -c log-x | grep WARN > /opt/dind-878516_logs.txt
+
+Verify Claim: k get pvc -o wide (look for STATUS bound)
+Verify Pod -> Claim: k describe pod logger (look for event errors)
+Verify ConfigMap in Pod: k exec time-check -n dvl1987 env | grep -i time
+
+## NEXT
+
+* note org, restart computer
+* go back through section tests (networking etc) service accounts
+
+k explain <resource> and grep for key
+k explain ingress --recursive | grep rules -A10
+k taint node --help
+k taint node node01 "app_type=alpha:NoSchedule"
+
+k label node node02 app_type=beta
+
+k describe node node01 | grep app_type
+
+Taints and tolerations
+spec: 
+  tolerations:
+  - key: "app_type"
+    value: "alpha"
+    operator: "Equal"
+    effect: "Noschedule"
+
+Affinity 
+k label node node02 app_type=beta
+spec:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: app_type
+            operator: In
+            values:
+            - beta
+
+
+## Setup
+TextEdit: Preferences
+* Plain text for new files
+* Auto correct as type (format > spelling)
+
+alias k=kubectl
+
+vi ~/.vimrc
+```bash
+set nu
+set expandtab
+set list
+set shiftwidth=2
+set tabstop=2
+```
+
+k config set-context mycontext --namespace=mynamespace
+k config set-context --current --namespace=
+
+--all-namespace
+
+export NS=dev1401
+alias get="k get -n $NS pods -o wide"
+alias get_all="k get pods --all-namespaces"
+alias des="k describe pod -n $NS"
 ## Syntax
 
 kubectl <action> <resourceType> <name> <options>
@@ -13,6 +108,17 @@ kubectl <action> <resourceType> <name> <options>
 
 OR Use the edit command to update pod properties. 
 `kubectl edit pod <pod-name>`
+
+k run mypod --image=nginx -l app=mypod
+  --command="sleep 3600"
+k expose deploy myDeploy --name=myService --port=6379 --target-port=6379
+* optional: --type=nodeport
+
+k create <thing> <name> --from-literal=<secret=value>
+RUN: pod
+CREATE: deploy, secret, configmap, namespace
+EXPOSE: Service
+YAML: pv, pvc, netpol
 
 ### get
 ```
@@ -37,16 +143,38 @@ netpol: network policies
 pv: persistent volume
 pvc: persistent volume claims
 sa: service account
+cm: configmaps
+no: nodes:
+netpol: networkpolicies
+NO SHORTCUT
+    * jobs
+    * secrets
 
 ## Debug --------------------
 
-View Logs: k exec -it webapp cat /log/app.log
+List all Resources 
+k api-resources | grep -i thingy
+
+View Logs:
+k logs throw-dice-pod 
+k exec -it webapp cat /log/app.log
 
 Extracting the basic yaml from a running resource
 `kubectl get deploy busybox --export -o yaml > exported.yaml`
 
 Output yaml if you don't have one
 `kubectl get pod <pod-name> -o yaml > pod-definition.yaml`
+
+Get all with selector
+kubectl get all --selector env=prod
+kubectl get all --selector env=prod,bu=finance,tier=frontend
+
+### Check connection
+k exec -it webapp-color -- sh
+(uses netcat nc)
+/opt # nc -z -v -w 1 secure-service 80
+GOOD: secure-service (10.103.1091.151:80) open
+BAD: timeout or "nc: bad address 'secure-service'"
 
 ## Pods (po) ---------------------
 
@@ -65,12 +193,14 @@ k run redis --image=redis:alpine --labels=tier=db
 Create w port
 k run custom-nginx --image=nginx --port=8080
 
-list: k get pods -o wide
+list: k get pods --show-labels -o wide
 describe: k describe pod <name>
 delete: kubectl delete pod <name-pod>
 edit: k apply -f <name-pod.yaml>
 edit: kubectl edit pod <name>
 - must delete old instances
+
+'kubectl get pods --selector env=dev'
 
 ### Kubernetes commands and argurments
 
@@ -80,18 +210,24 @@ ENTRYPOINT ["sleep"] -> command: ["sleep"]
 
 CMD ["5"] -> args: ["10"]
 
-## Jobs --------------------------
+## Jobs, Cronjobs --------------------------
 
-$ k run nginx --image=nginx --restart=Never  # pod
-$ kubectl create job nginx --image=nginx  # job
-$ kubectl create cronjob nginx --image=nginx --schedule="* * * * *"  # cronJob
+### Pod
+$ k run nginx --image=nginx --restart=Never 
+
+### Job
+$ kubectl create job nginx --image=nginx 
+
+### CronJob
+$ kubectl create cronjob nginx --image=nginx --schedule="* * * * *" 
+
 $ kubectl run crontest --image=busybox --schedule="*/1 * * * *" --restart=OnFailure --dry-run -o yaml > crontest-cron.yml
+
 
 ## Replica Sets (rs) -------------
 create: k create -f replicaset-definition-1.yaml
 list: kubectl get replicaset
 describe: k describe rs <name-rs>
-debug: kubectl explain replicaset 
 edit: kubectl edit replicaset 
 scale: `kubectl scale rs myapp-rs --replicas=5`
 
@@ -105,6 +241,8 @@ Selector: tier=db
 kubectl expose pod redis --port=6379 --name redis-service --dry-run=client -o yaml > redis-service.yaml
 
 kubectl expose rc hello-rc --name=hello-service --target-port=8080 --type=NodePort
+
+k expose deploy webapp-deploy --type=NodePort --name=webapp-svc --target-port=8080  --dry-run -o yaml > webapp-svc.yaml
 
 kubectl run httpd --image=httpd:alpine --port=80 --expose
 
@@ -127,7 +265,8 @@ kubectl create deploy nginx -image=nginx --dry-run=client -o yaml > nginx-deploy
 
 kubectl run nginx --image=nginx --replicas=3 --dry-run -o yaml > nginx-deploy.yml
 
-
+EDIT
+kubectl edit deployment frontend
 
 ## Namespace (ns or -n) ----------------
 
@@ -147,3 +286,11 @@ k get pv # persistentvolume
 ```s
 $ kubectl create secret generic my-secret --from-literal=foo=bar -o yaml --dry-run > my-secret.yaml
 ```
+
+## Networking (netpol) ---------------
+
+kubectl get networkpolicy
+
+## Config Map (cm) --------------
+
+k create cm time-config -n dvl1987 --from-literal=TIME_FREQ=10 --dry-run-o yaml > time-config.yaml

@@ -52,23 +52,35 @@ If you think it’s hard mark it right away, don’t try it
 ^ start line
 $ end line
 D delete to end of line
+u Undo last change
+:set nu  set line numbers
 
 vi ~/.vimrc
 ```bash
-set nu
-set expandtab
-set list
-set shiftwidth=2
-set tabstop=2
+set nu # line number
+set expandtab #  use tabs instead of spaces 
+set tabstop=2 # max tab width in spaces
+set shiftwidth=2 # Size of indent in spaces
+set list # show all whitespace chars
 ```
 
 ## Commands 
+https://docs.linuxfoundation.org/tc-docs/certification/tips-cka-and-ckad
+
 alias k=kubectl
+
+At the start of each task you'll be provided with the command to ensure you are on the correct cluster to complete the task.
 k config set-context mycontext --namespace=mynamespace # Run this on every question
+
 kubectl explain cronjob.spec.jobTemplate --recursive
 man if_exam # exam tips during exam
-sudo -i
+sudo -i // Assume elevated privileges on any node
+
+Nodes making up each cluster can be reached via ssh, using a command such as the following:
 ssh <node-name>
+
+You must return to the base node (hostname node-1) after completing each task.
+
 
 ### Imperitive commands
 k run nginx --image=nginx (deployment)

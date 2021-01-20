@@ -1,0 +1,27 @@
+# k create cm game-config --from-literal=enemies=aliens --from-literal=lives=3
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: game-config
+data:
+  enemies: aliens
+  lives: "3"
+
+#####
+# Pod with config map
+####
+apiVersion: v1
+kind: Pod
+metadata:
+  name: webapp
+spec:
+  containers:
+    - name: game
+      image: game-image
+      command: [ "/bin/sh", "-c", "env" ]
+      env:
+        - name: ENEMIES
+          valueFrom:
+            configMapKeyRef:
+              name: game-config
+              key: enemies

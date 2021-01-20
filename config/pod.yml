@@ -1,3 +1,4 @@
+# k run hello-pod --image=nginx --command "sleep 3600"
 apiVersion: v1
 kind: Pod
 metadata:
@@ -5,6 +6,7 @@ metadata:
 spec:
   containers:
   - name: hello-container
-    image: nigelpoulton/pluralsight-docker-ci:latest
+    image: nginx
     ports:
     - containerPort: 8080
+    command: ["sleep", "3600"]

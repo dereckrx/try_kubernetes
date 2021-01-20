@@ -39,6 +39,7 @@ Then the app is available at:
 
 https://app.pluralsight.com/library/courses/managing-kubernetes-api-server-pods/table-of-contents
 https://app.pluralsight.com/library/courses/kubernetes-installation-configuration-fundamentals/table-of-contents
+
 https://app.pluralsight.com/player?course=kubernetes-installation-configuration-fundamentals&author=anthony-nocentino&name=c841b22a-35fa-4260-b592-e1a755760ace&clip=0&mode=live
 
 ## Done

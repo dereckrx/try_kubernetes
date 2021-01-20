@@ -2,6 +2,7 @@
 # kubectl get jobs
 # kubectl get pods
 # kubectl logs math-add-job-ld87pn
+# k describe job # view number of success/failure and pod creates
 
 apiVersion: batch/v1
 kind: Job
@@ -10,6 +11,7 @@ metadata:
 spec:
   completions: 3 # Run this job until you get this many successes
   parallelism: 3 # Run this many pods in parallel
+  backoffLimit: 15 # How many failures before back off
   template:
     spec:
       containers:

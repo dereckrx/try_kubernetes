@@ -27,9 +27,9 @@ spec:
     matchLabels:
       app: hello-world
   strategy:
-    type: RollingUpdate
+    type: RollingUpdate # types: Recreate
     rollingUpdate: # Take 1 down at a time
-      maxUnavailable: 1
+      maxUnavailable: 1 # can take % ex: 25
       maxSurge: 1
   template:
     metadata:
