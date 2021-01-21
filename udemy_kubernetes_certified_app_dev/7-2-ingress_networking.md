@@ -23,8 +23,13 @@ http://mycompany.com
 -> service-clusterIP -> MySql pods
 
 ## Ingress
+- REQUIRES an ingress-controller to work (a deploy running a controller image)
 - exposes a single url for your users
+  - maps to a service name and port <service-name>:<port>
 - routes based off of url path
+  - uses rules to match /path to serviceName:port
+- OR routes based of subdomain 
+  - uses rules with host instead of or with /path 
 - manages ssl 
 
 http://mycompany.com 
@@ -35,6 +40,8 @@ http://mycompany.com
 ### Ingress Controllers
 - Istio, HAProxy, nginx, and other options
 
+
+## Ingress Resources
 ```yaml
 apiVersion: extensions/v1beta1
 kind: Ingress

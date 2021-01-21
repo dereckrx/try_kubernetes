@@ -1,14 +1,14 @@
 
 
 ## INbox
-* how to find out hostPath key in persistant-volume? PV types?
-* how claim needed storage class as well
+
+mark what questions have been verified 
 
 sudo -i
 ssh <pod>
 VIM config
 
-QUIZ: volumeMounts have VolumePath not path
+QUIZ: volumeMounts have mountPath not path
 QUIZ: volumeMounts: name, mountPath, readOnly
 QUIZ: k exec -it webapp-color -- sh. then: nc -vz -w 1 secure-pop
 QUIZ: --command when? k run pod (without =)
@@ -18,6 +18,20 @@ QUIZ: Debug pod
 - check ports
 - look at svc and ingress controllers
 QUIZ: WATCH OUT FOR NUMBERS IN CONFGS/ENV, must be wrapped in quotes "
+QUIZ: What are the service endpoints?
+- Endpoints shows which pod IPs the service is currently forwarding too, you can curl them
+QUIZ: are node IPs static? Yes
+QUIZ: are pod's IP static? NO, they will change if the pod goes down.
+- this is why we need ClusterIP services which create a static IP.
+QUIZ: How can access my app at www.myapp.com?
+- DNS AName myapp.com -> proxy-server or LB with incoming port :80
+  - http://myapp.com -> http://myapp.com:80
+- Proxy routes port 80 -> http://<node-ip>:38080
+- Create NodePort service with nodePort: 38080
+QUIZ: Route from ingress to Pod? 
+- ingress my.host.name/path -> serviceName:port -> :targetPort -> podGroup:port
+QUIZ: Ingress namespace should be? Same as backend services
+QUIZ: what port do you use in a netpol? The pods labels and port (no svc)
 
 k edit deploy nginx-deploy --image=nginx:1.17 --record
 
@@ -26,6 +40,8 @@ volumeMounts:
 ports:
 - containerPort: 6379
 nodeName: 
+nodeSelector: 
+  labelName: labelValue
 
 k logs <pod_name> -c log-x | grep WARN > /opt/dind-878516_logs.txt
 
@@ -35,10 +51,9 @@ Verify ConfigMap in Pod: k exec time-check -n dvl1987 env | grep -i time
 
 ## NEXT
 
-* note org, restart computer
-* go back through section tests (networking etc) service accounts
-  * k set serviceaccount deployment frontend myuser
+k set serviceaccount deployment frontend myuser
 
+k get pod  --show-labels --selector=env=prod,bu=finance,tier=frontend
 k explain <resource> and grep for key
 k explain ingress --recursive | grep rules -A10
 k taint node --help
@@ -71,8 +86,7 @@ spec:
 
 
 ### Imperitive commands (TODO)
-k run nginx --image=nginx (deployment)
-k run nginx --image=nginx --restart=Never (pod)
+k run nginx --image=nginx (pod)
 k run nginx --image=nginx --restart=OnFailure (job)
 k run nginx --image=nginx --restart=OnFailure --schedule="* * * * *" (cronjob)
 
@@ -128,8 +142,7 @@ kubectl <action> <resourceType> <name> <options>
 OR Use the edit command to update pod properties. 
 `kubectl edit pod <pod-name>`
 
-k run mypod --image=nginx -l app=mypod
-  --command="sleep 3600"
+k run mypod --image=nginx -l app=mypod --command "sleep 3600"
 k expose deploy myDeploy --name=myService --port=6379 --target-port=6379
 * optional: --type=nodeport
 
@@ -150,7 +163,7 @@ get all
 
 ### options
 --dry-run: only output success/failure
---namespace=<namespace>
+--namespace=<namespace> OR -n <ns>
 
 ## Shortcuts ------------------
 po: pods
@@ -231,9 +244,6 @@ CMD ["5"] -> args: ["10"]
 
 ## Jobs, Cronjobs --------------------------
 
-### Pod
-$ k run nginx --image=nginx --restart=Never 
-
 ### Job
 $ kubectl create job nginx --image=nginx 
 
@@ -252,6 +262,7 @@ scale: `kubectl scale rs myapp-rs --replicas=5`
 
 ## Service (svc) --------------
 Create a service redis-service to expose the redis application within the cluster on port 6379.
+
 Service: redis-service
 Port: 6379
 Type: ClusterIp
@@ -272,6 +283,13 @@ create: `kubectl create -f config/service.yml`
 describe: `kubectl describe svc hello-service`
 
 list: `k get svc`
+
+NODE PORT TESTING
+* hostname -I // to get ip address of cluster
+* k get svc to get nodePort // ex: 30008
+* curl 172.17.0.24:30008
+
+
 
 ## Deployment (deploy) --------------
 Create: 
@@ -308,10 +326,11 @@ k get pv # persistentvolume
 $ kubectl create secret generic my-secret --from-literal=foo=bar -o yaml --dry-run > my-secret.yaml
 ```
 
+## Config Map (cm) --------------
+
+k create cm time-config -n dvl1987 --from-literal=TIME_FREQ=10 --dry-run-o yaml > time-config.yaml
+
 ## Networking (netpol) ---------------
 
 kubectl get networkpolicy
 
-## Config Map (cm) --------------
-
-k create cm time-config -n dvl1987 --from-literal=TIME_FREQ=10 --dry-run-o yaml > time-config.yaml

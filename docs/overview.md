@@ -17,10 +17,13 @@ Pods: smallest unit of work
 
 Replica Sets / Replication controller / deployments:
 
-Scale pods, maintain desired state, rollbacks, updates
+- Scale pods, maintain desired state, rollbacks, updates
 
 Services:
-Provide stable networking IP/Ports, and handle load balancing between nodes.
+- Enable internal (ClusterIP) between nodes
+- and external requests (NodePort) from outside world
+- Provide stable IP/Ports for node or groups of nodes
+- Provide load balancing requests to a group of nodes
 
 ### Scaling
 
@@ -62,7 +65,7 @@ Pods come and go as they are scaled and healed. So "Services" give us single rel
 
 Services:
 
-- Load balances between pods
+- Load balances between pods (Randomly if ClusterIP/NodePort)
 - Exposes single reliable DNS,IP,Port to connect the pods
   - ex: IP: 10.0.0.50, dns: "myservice", port:30050
 - Port is cluster wide

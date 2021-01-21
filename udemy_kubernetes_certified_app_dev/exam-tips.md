@@ -26,12 +26,12 @@ Candidates may use their Chrome or Chromium browser to open one additional tab i
 access assets at: https://kubernetes.io/docs/, https://github.com/kubernetes/,
 https://kubernetes.io/blog/ and their subdomains.
 
-13% – Core Concepts
-18% – Configuration
-10% – Multi-Container Pods
-18% – Observability
 20% – Pod Design
+18% – Configuration
+18% – Observability
+13% – Core Concepts
 13% – Services & Networking
+10% – Multi-Container Pods
 8% – State Persistence
 
 ## Pivots Recomendations

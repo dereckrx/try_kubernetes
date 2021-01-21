@@ -1,13 +1,26 @@
 ## Services
 
+Service
+- port: 80 listening for incoming request on :80
+- targetPort: 80, forward requests to mypod:80
+
+Example:
+- nodePort: 30008
+- svcPorts: 80 -> 8080
+- mypod.port: 8080
+
+curl http:my-cluster:30008 -> 80 -> mypod:8080
+
 node port service
 - listens on a port and forwards request to pods
 - can span across multiple nodes, or a single node with many identical pods
 
 Service Types:
-- NodePort: Expose a port for one or many pods
-- ClusterIP: Expose an IP for a cluster of nodes
-- Load Balancer
+- NodePort: Enable external comms between outside world and node.
+    - Expose an internal pod via a port on the node
+- ClusterIP: Enable internal comms between nodes
+  - Expose a virtual IP for a cluster of nodes so frontend node can talk to backend node
+- Load Balancer: Balance request to you frontend servers (pods)
 
 Node Port:
 - NodePort(node): 30008, 
